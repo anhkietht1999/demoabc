@@ -1,0 +1,44 @@
+.rule-configurator-control div.condition-group {
+    text-align: left;
+    display: block !important;
+    padding-left: 20px !important;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAABAQMAAAAsMPawAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAANQTFRFAI7/L3hnkgAAAApJREFUeJxjYAAAAAIAAUivpHEAAAAASUVORK5CYII=');
+    background-repeat: no-repeat;
+    background-size: 30px 1px;
+    background-position: left 15px;
+}
+
+.rule-configurator-control>div.condition-group {
+    padding-left: 0px !important;
+}
+
+
+.rule-configurator-control div.condition {
+    padding: 10px 0px 10px 10px;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAFAQMAAAC+ShTcAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAANQTFRFAI7/L3hnkgAAAAtJREFUeJxjYIABAAAKAAF/gHReAAAAAElFTkSuQmCC');
+    background-repeat: repeat-y;
+    background-position: 10px 0px;
+}
+
+.rule-configurator-control div.condition div.ms-Grid>div.ms-Grid-row {
+    margin-left: -16px;
+    margin-right: -16px;
+    padding-left: 20px;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAABAQMAAAAsMPawAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAANQTFRFAI7/L3hnkgAAAApJREFUeJxjYAAAAAIAAUivpHEAAAAASUVORK5CYII=');
+    background-repeat: no-repeat;
+    background-size: 30px 1px;
+    background-position: 9px center;
+}
+
+.rule-configurator-control div.condition div.ms-Grid>div.ms-Grid-row {
+    margin-bottom: 10px;
+}
+
+.rule-configurator-control div.condition div.ms-Grid:last-child>div.ms-Grid-row {
+    margin-bottom: 0px;
+}
+
+
+div.condition > .condition-group:not(div:last-child){
+    margin-bottom:10px !important;
+}
