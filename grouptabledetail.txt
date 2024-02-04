@@ -1,0 +1,138 @@
+import * as React from 'react';
+import { IStackTokens, Icon } from '@fluentui/react';
+import { useState, useRef, useEffect } from 'react';
+import { DetailsList, TextField, Checkbox, Toggle, SelectionMode } from "@fluentui/react";
+
+export interface ICustomerRankingProps {
+  context?: any;
+}
+interface IItem {
+  id: number;
+  name: string;
+  completed: boolean;
+  isFavorite: boolean;
+  city:string;
+}
+
+const listItems: IItem[] = [
+  {
+    id: 1,
+    name: "Item 1",
+    completed: false,
+    isFavorite: true,
+    city:"HCM"
+  },
+  {
+    id: 2,
+    name: "Item 2",
+    completed: true,
+    isFavorite: false,
+    city : "HCM"
+  },
+  {
+    id: 3,
+    name: "Item 3",
+    completed: true,
+    isFavorite: false,
+    city : "HN"
+  },
+  // ... thêm các item khác
+];
+const columns: any[] = [
+  {
+    key: "name",
+    name: "Tên",
+    fieldName: "name",
+    minWidth: 100,
+    maxWidth: 200,
+    onRender: (item: IItem) => (
+      <TextField
+        value={item.name}
+
+      />
+    ),
+  },
+  {
+    key: "completed",
+    name: "Hoàn thành",
+    fieldName: "completed",
+    minWidth: 75,
+    onRender: (item: IItem) => (
+      <Checkbox
+        checked={item.completed}
+
+      />
+    ),
+  },
+  {
+    key: "isFavorite",
+    name: "Yêu thích",
+    fieldName: "isFavorite",
+    minWidth: 75,
+    onRender: (item: IItem) => (
+      <Toggle
+        checked={item.isFavorite}
+
+      />
+    ),
+  },
+];
+const groups =  listItems.reduce((acc :any [], cur) => {
+  const { city, name } = cur;
+  const group = {
+    key: city,
+    name: `${city}`,
+    startIndex: 0,
+    count: 1
+  };
+  if (acc.length === 0) {
+    acc.push(group);
+    return acc;
+  } else if (acc[acc.length - 1].key !== cur.city) {
+    const { count, startIndex } = acc[acc.length - 1];
+    acc.push({
+      ...group,
+      startIndex: count + startIndex,
+    });
+    return acc;
+  }
+  acc[acc.length - 1].count++;
+  return acc;
+}, []);
+
+const CustomerRankingMain: React.FunctionComponent<ICustomerRankingProps> = (props) => {
+  const [listItem, setItems] = React.useState<IItem[]>(listItems);
+  const [compactMode, setCompactMode] = React.useState(false);
+
+  const [value, setValue] = useState(props.context);
+  const margin = props.context?.parameters.margin?.raw ? props.context.parameters.margin.raw : "";
+  const minW = props.context?.parameters.minWidth?.raw ? props.context.parameters.minWidth.raw : "";
+  const ctnRef = useRef(null);
+
+  React.useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    setCompactMode(mq.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setCompactMode(e.matches);
+    };
+
+    mq.addListener(handleChange);
+
+    return () => mq.removeListener(handleChange);
+  }, []);
+
+  
+ 
+  return (
+
+      <DetailsList
+        items={listItem}
+        groups={groups}
+        columns={columns}
+        compact={false}
+      />
+  );
+}
+
+export default CustomerRankingMain;
