@@ -1,0 +1,97 @@
+import * as React from "react";
+import { DetailsList, TextField, Checkbox, Toggle } from "@fluentui/react";
+
+interface Item {
+  id: number;
+  name: string;
+  completed: boolean;
+  favorite: boolean;
+}
+
+const items: Item[] = [
+  { id: 1, name: "Item 1", completed: false, favorite: true },
+  { id: 2, name: "Item 2", completed: true, favorite: false },
+  { id: 3, name: "Item 3", completed: false, favorite: true },
+  // ...
+];
+
+const columns: any[] = [
+  {
+    key: "name",
+    name: "Tên",
+    fieldName: "name",
+    minWidth: 100,
+    maxWidth: 200,
+    isResizable: true,
+  },
+  {
+    key: "completed",
+    name: "Hoàn thành",
+    fieldName: "completed",
+    minWidth: 100,
+    maxWidth: 100,
+    isResizable: true,
+    onRender: (item: Item) => (
+      <Checkbox
+        checked={item.completed}
+        onChange={(ev, checked) => {
+          // Cập nhật trạng thái "completed" cho item
+          const updatedItems = items.map((i) => (i.id === item.id ? { ...i, completed: checked } : i));
+          setItems(updatedItems);
+        }}
+      />
+    ),
+  },
+  {
+    key: "favorite",
+    name: "Yêu thích",
+    fieldName: "favorite",
+    minWidth: 100,
+    maxWidth: 100,
+    isResizable: true,
+    onRender: (item: Item) => (
+      <Toggle
+        checked={item.favorite}
+        onChange={(ev, checked) => {
+          // Cập nhật trạng thái "favorite" cho item
+          const updatedItems = items.map((i) => (i.id === item.id ? { ...i, favorite: checked } : i));
+          setItems(updatedItems);
+        }}
+      />
+    ),
+  },
+];
+
+const App: React.FC = () => {
+  const [items, setItems] = React.useState<Item[]>(items);
+
+  return (
+    <div>
+      <DetailsList
+        items={items}
+        columns={columns}
+        selectionMode={SelectionMode.none}
+        compact={true}
+        enableKeyboardNavigation={true}
+        // Responsive
+        onRenderItemColumn={(item: Item, column: any, index: number) => {
+          if (column.key === "name") {
+            return (
+              <TextField
+                value={item.name}
+                onChange={(ev, value) => {
+                  // Cập nhật tên cho item
+                  const updatedItems = items.map((i) => (i.id === item.id ? { ...i, name: value } : i));
+                  setItems(updatedItems);
+                }}
+              />
+            );
+          }
+          return null;
+        }}
+      />
+    </div>
+  );
+};
+
+export default App;

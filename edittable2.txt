@@ -1,0 +1,125 @@
+import * as React from 'react';
+import { IStackTokens, Icon } from '@fluentui/react';
+import { useState, useRef, useEffect } from 'react';
+import { DetailsList, TextField, Checkbox, Toggle, SelectionMode } from "@fluentui/react";
+
+export interface ICustomerRankingProps {
+  context?: any;
+}
+interface IItem {
+  id: number;
+  name: string;
+  completed: boolean;
+  isFavorite: boolean;
+}
+
+const listItems: IItem[] = [
+  {
+    id: 1,
+    name: "Item 1",
+    completed: false,
+    isFavorite: true,
+  },
+  {
+    id: 2,
+    name: "Item 2",
+    completed: true,
+    isFavorite: false,
+  },
+  // ... thêm các item khác
+];
+const columns: any[] = [
+  {
+    key: "name",
+    name: "Tên",
+    fieldName: "name",
+    minWidth: 100,
+    maxWidth: 200,
+    onRender: (item: IItem) => (
+      <TextField
+        value={item.name}
+
+      />
+    ),
+  },
+  {
+    key: "completed",
+    name: "Hoàn thành",
+    fieldName: "completed",
+    minWidth: 75,
+    onRender: (item: IItem) => (
+      <Checkbox
+        checked={item.completed}
+
+      />
+    ),
+  },
+  {
+    key: "isFavorite",
+    name: "Yêu thích",
+    fieldName: "isFavorite",
+    minWidth: 75,
+    onRender: (item: IItem) => (
+      <Toggle
+        checked={item.isFavorite}
+
+      />
+    ),
+  },
+];
+
+
+const CustomerRankingMain: React.FunctionComponent<ICustomerRankingProps> = (props) => {
+  const [listItem, setItems] = React.useState<IItem[]>(listItems);
+  const [compactMode, setCompactMode] = React.useState(false);
+
+  const [value, setValue] = useState(props.context);
+  const margin = props.context?.parameters.margin?.raw ? props.context.parameters.margin.raw : "";
+  const minW = props.context?.parameters.minWidth?.raw ? props.context.parameters.minWidth.raw : "";
+  const ctnRef = useRef(null);
+
+  React.useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    setCompactMode(mq.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setCompactMode(e.matches);
+    };
+
+    mq.addListener(handleChange);
+
+    return () => mq.removeListener(handleChange);
+  }, []);
+
+  const resize = () => {
+    if (ctnRef && ctnRef.current) {
+      let ctn = ctnRef.current as any;
+      let ctnRec = ctn.getBoundingClientRect();
+      if (ctnRec.width < minW) {
+        ctn.firstElementChild.style.transform = `scale(${(ctnRec.width / minW)})`;
+        let childRec = ctn.firstElementChild.getBoundingClientRect();
+        ctn.style.height = childRec.height + "px";
+      }
+    }
+  };
+
+  let w = window as any;
+  if (w.resizeHandlers) {
+    w.resizeHandlers["customerRankResizeHandler"] = resize;
+  }
+
+  useEffect(() => {
+    resize();
+  }, []);
+
+  return (
+
+      <DetailsList
+        items={listItem}
+        columns={columns}
+        compact={compactMode}
+      />
+  );
+}
+
+export default CustomerRankingMain;
